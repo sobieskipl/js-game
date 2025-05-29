@@ -11,8 +11,8 @@ const player = {
     attackTimer: 0,
 
     init: function() {
-        this.x = canvas.width / 2 - this.width / 2;
-        this.y = canvas.height / 2 - this.height / 2;
+        this.x = gameState.mapSize / 2 - this.width / 2;
+        this.y = gameState.mapSize / 2 - this.height / 2;
     },
 
     update: function(gameState) {
@@ -25,7 +25,7 @@ const player = {
         if (gameState.keys['a']) moveX -= 1;
         if (gameState.keys['d']) moveX += 1;
 
-        // Normalizacja wektora ruchu (aby ruch po skosie nie był szybszy)
+        // Normalizacja wektora ruchu
         if (moveX !== 0 || moveY !== 0) {
             const length = Math.sqrt(moveX * moveX + moveY * moveY);
             moveX /= length;
@@ -35,9 +35,11 @@ const player = {
         this.x += moveX * this.speed * gameState.deltaTime;
         this.y += moveY * this.speed * gameState.deltaTime;
 
-        this.x = Math.max(0, Math.min(canvas.width - this.width, this.x));
-        this.y = Math.max(0, Math.min(canvas.height - this.height, this.y));
+        // Ograniczenie ruchu do granic mapy
+        this.x = Math.max(0, Math.min(gameState.mapSize - this.width, this.x));
+        this.y = Math.max(0, Math.min(gameState.mapSize - this.height, this.y));
 
+        // Atak
         this.attackTimer -= gameState.deltaTime;
         if (gameState.mouse.isDown && this.attackTimer <= 0) {
             this.attackTimer = this.attackCooldown;
@@ -58,9 +60,11 @@ const player = {
     },
 
     render: function(ctx) {
+        // Renderowanie gracza
         ctx.fillStyle = this.color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
 
+        // Renderowanie zdrowia
         ctx.fillStyle = 'red';
         ctx.fillRect(this.x, this.y - 10, this.width * (this.health / 100), 5);
     }
