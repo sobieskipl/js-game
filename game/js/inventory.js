@@ -3,6 +3,7 @@ const inventory = {
     container: document.getElementById('inventory'),
 
     init: function() {
+        // Inicjalizacja ekwipunku
         this.container.innerHTML = '';
         for (let i = 0; i < this.slots.length; i++) {
             const slot = document.createElement('div');
