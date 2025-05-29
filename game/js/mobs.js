@@ -4,9 +4,18 @@ const mobs = {
     spawnTimer: 0,
 
     spawnMob: function(maxX, maxY) {
+        // Spawn moba w losowym miejscu na mapie
+        const padding = 200; // Nie spawnuj zbyt blisko gracza
+        let x, y;
+        
+        do {
+            x = Math.random() * (maxX - 40);
+            y = Math.random() * (maxY - 40);
+        } while (Math.abs(x - player.x) < padding && Math.abs(y - player.y) < padding);
+
         this.list.push({
-            x: Math.random() * (maxX - 40),
-            y: Math.random() * (maxY - 40),
+            x: x,
+            y: y,
             width: 40,
             height: 40,
             health: 5,
@@ -16,13 +25,16 @@ const mobs = {
         });
     },
 
+    // Reszta kodu pozostaje bez zmian
     update: function(gameState, player) {
+        // Aktualizacja timerów spawnu
         this.spawnTimer -= gameState.deltaTime;
         if (this.spawnTimer <= 0 && this.list.length < 1) {
             this.spawnTimer = this.spawnCooldown;
-            this.spawnMob(canvas.width, canvas.height);
+            this.spawnMob(gameState.mapSize, gameState.mapSize);
         }
 
+        // Aktualizacja mobów
         this.list.forEach(mob => {
             // Proste śledzenie gracza
             const dx = player.x - mob.x;
@@ -34,11 +46,13 @@ const mobs = {
                 mob.y += (dy / distance) * mob.speed * gameState.deltaTime;
             }
 
+            // Kolizja z graczem
             if (this.checkCollision(mob, player)) {
                 player.takeDamage(1 * gameState.deltaTime);
             }
         });
 
+        // Usuwanie martwych mobów
         this.list = this.list.filter(mob => mob.health > 0);
     },
 
@@ -60,9 +74,11 @@ const mobs = {
 
     render: function(ctx) {
         this.list.forEach(mob => {
+            // Renderowanie moba
             ctx.fillStyle = mob.color;
             ctx.fillRect(mob.x, mob.y, mob.width, mob.height);
 
+            // Renderowanie zdrowia
             ctx.fillStyle = 'red';
             ctx.fillRect(mob.x, mob.y - 10, mob.width * (mob.health / mob.maxHealth), 5);
         });
