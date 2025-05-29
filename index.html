@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test1</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #222;
+        }
+        canvas {
+            display: block;
+        }
+        #inventory {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .slot {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #555;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        #health {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div id="health">HP: 100</div>
+    <canvas id="gameCanvas"></canvas>
+    <div id="inventory"></div>
+
+    <script src="player.js"></script>
+    <script src="mobs.js"></script>
+    <script src="inventory.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
